@@ -1,4 +1,5 @@
 const Product = require("./models/product");
+const Brand = require("./models/brand")
 const express = require("express");
 const PORT = process.env.PORT || 3000;
 const db = require("./db/index");
@@ -22,7 +23,7 @@ app.get('/products', async (req, res) => {
   res.json(products)
 })
 
-app.get( "/products/:id", async (req, res) => {
+app.get("/products/:id", async (req, res) => {
   //checking to see if something exist
   try {
     const { id } = req.params;
@@ -34,3 +35,21 @@ app.get( "/products/:id", async (req, res) => {
     res.send("Product not found")
   }
 })
+
+app.get("/brands", async (req, res) => {
+  const brands = await Brand.find();
+  res.json(brands);
+})
+
+app.get("/brands/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const brand = await Brand.findById(id);
+    if (!brand) throw Error("Brand not found");
+    res.json(brand)
+  } catch (e) {
+    console.log(e);
+    res.send("Product not found")
+  }
+})
+
